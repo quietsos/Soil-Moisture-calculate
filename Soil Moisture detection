@@ -1,0 +1,60 @@
+#include<LiquidCrystal.h>
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
+
+int soilMoisture = A0;
+int value;
+float percent;
+
+void calculateData(void);
+void serialData(void);
+void lcdPrint(void);
+
+void setup()
+{
+  pinMode(soilMoisture,INPUT);
+  lcd.begin(40,2);
+  Serial.begin(9600);
+
+}
+
+void loop() 
+{
+   calculateData();
+   serialData();
+   lcdPrint();
+
+   delay(500);   
+}
+
+void calculateData(void)
+{
+       value = analogRead(soilMoisture);
+       percent = 100 - (value / 10.24);
+          delay(500);  
+}
+
+void serialData(void)
+{
+   Serial.print("Soil Moisture value : ");
+   Serial.println(value);
+   Serial.print("Soil Moisture : ");
+   Serial.print(percent);
+   Serial.println(" % ");  
+      delay(500);
+}
+
+void lcdPrint(void)
+{  
+   lcd.setCursor(1,0);
+   lcd.print("ICT_Innovation_Lab");
+   lcd.print("  Moist value:");
+   lcd.print(value);
+      delay(500);
+
+   lcd.setCursor(0,1);
+   lcd.print(" Soil Moist:");
+   lcd.print(percent);
+   lcd.print(" %");
+      delay(500); 
+}
